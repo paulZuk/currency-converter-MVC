@@ -5,6 +5,7 @@ export default class CurrencyView {
         this._model = model;
 
         this.transactionName = $('.transaction-name');
+        this.transactionValue = $('.transaction-value');
         this.currencyFactor = $('#currencyFactor');
         this.addTransactionBtn = $('button');
         this.list = $('ul');
@@ -19,25 +20,27 @@ export default class CurrencyView {
     attachEventListenersHTML() {
         this.addTransactionBtn.on('click', () => {            
             this.addButtonClicked.notify({
-                name: this.transactionName.val()
+                name: this.transactionName.val(),
+                value: this.transactionValue.val()
             });
+            this.clearInputs();
         });
         this.currencyFactor.on('change', ()=> {
             this.currencyFactorChanged.notify({
                 factor: this.currencyFactor.val()
             })
         });
-
+    }
+    clearInputs() {
+        this.transactionName.val('');
+        this.transactionValue.val('');
     }
 
     attachModelListeners() {
         this._model.addedTransaction.attach(()=> {
             this.buildListTransactions();
         });
-    }
-
-    attachModelListeners() {
-        this._model.addedTransaction.attach(() => {
+        this._model.updatedFactor.attach(() => {
             this.buildListTransactions();
         });
     }
@@ -48,12 +51,16 @@ export default class CurrencyView {
         this.list.html('');
 
         transactions.forEach(elem => {
-            let element = $('<li>', {class: "list-group-item d-flex justify-content-between"});
-            let del = $('<div>', {style: 'width:20px;height:20px;float:right', class:'fas fa-trash'});
-            let p = $('<div>',{ text: elem } )
+            const element = $('<li>', {class: "list-group-item d-flex justify-content-between"});
+            const del = $('<div>', {style: 'width:20px;height:20px;float:right', class:'fas fa-trash'});
+            const name = $('<div>',{ text: elem.name } );
+            const amount = $('<div>', { text: elem.value + ' EURO'});
+            const amountPln =$('<div>', { text: elem.pln + ' PLN' });
            
             element
-                .append(p)
+                .append(name)
+                .append(amount)
+                .append(amountPln)
                 .append(del);
 
             this.list.append(element);

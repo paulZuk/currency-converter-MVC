@@ -6,7 +6,12 @@ export default class CurrencyController {
         this._view = view;
 
         this._view.addButtonClicked.attach((sender, args) => {
-            this.addItem(args.name)
+            const {name, value} = args;
+            let transaction = {
+                name,
+                value
+            }
+            this.addItem(transaction)
         });
 
         this._view.currencyFactorChanged.attach((sender, args ) => {

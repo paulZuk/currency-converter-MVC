@@ -11,17 +11,17 @@ export default class CurrencyModel {
     }
 
     addTransaction(transaction) {
-        
+
         this._transactions = [...this._transactions, transaction];
-        this.addedTransaction.notify({
-            transaction
-        });
+        this._transactions = this.plnCalculation();
+        this.addedTransaction.notify();
         console.log(this._transactions);
     }
 
     updateCurrencyFactor(factor) {
         this._currencyFactor = factor;
-        console.log(this._currencyFactor);
+        this._transactions = this.plnCalculation();
+        this.updatedFactor.notify();
         
     }
 
@@ -31,6 +31,12 @@ export default class CurrencyModel {
 
     getFactor() {
         return this._currencyFactor;
+    }
+
+    plnCalculation() {
+         return this._transactions.map(elem => {
+            return  Object.assign({},elem,{ pln: elem.value * this._currencyFactor });
+        });
     }
 
 }
