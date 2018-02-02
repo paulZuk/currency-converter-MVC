@@ -1,0 +1,13 @@
+.header, .list-header {
+    text-align: center;
+    padding: 20px;
+}
+.transaction-name, .transaction-value, #currencyFactor {
+    width: 30%;
+    margin: 0 10px;
+}
+.factor-label {
+    padding-right: 10px;
+    width: 30%;
+    margin: 0 10px;
+}

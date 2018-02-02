@@ -1,6 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
     entry: './src/js/index.js',
@@ -14,7 +15,8 @@ module.exports = {
             filename: 'index.html',
             template: './src/html-template/template.html'
         }),
-        new CleanWebpackPlugin (['./build'])
+        new CleanWebpackPlugin (['./build']),
+        new ExtractTextPlugin('css/style.css')
     ],
     devtool: 'source-map',
     devServer: {
@@ -34,11 +36,11 @@ module.exports = {
           }
         },
         {
-          test: /\.css$/, 
-          use: [
-            'style-loader',
-            'css-loader'
-          ]
+          test: /\.css$/,
+          use: ExtractTextPlugin.extract({
+            fallback: "style-loader",
+            use: "css-loader"
+          })
         }
       ]
     }
