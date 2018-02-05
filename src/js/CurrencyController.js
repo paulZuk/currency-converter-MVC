@@ -17,6 +17,14 @@ export default class CurrencyController {
         this._view.currencyFactorChanged.attach((sender, args ) => {
             this.updateFactor(args.factor);
         });
+
+        this._view.deleteButtonClicked.attach((sender, args) => {
+            this.deleteTransaction(args.toDelete);
+        });
+    }
+
+    deleteTransaction(transactionName) {
+        this._model.deleteTransaction(transactionName);
     }
 
     addItem(transaction) {

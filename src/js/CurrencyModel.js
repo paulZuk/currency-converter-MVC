@@ -7,6 +7,7 @@ export default class CurrencyModel {
 
         this.addedTransaction = new Event(this);
         this.updatedFactor = new Event(this);
+        this.deletedTransaction = new Event(this);
         // this.deletedTransaction = new Event(this);
     }
 
@@ -16,6 +17,18 @@ export default class CurrencyModel {
         this._transactions = this.plnCalculation();
         this.addedTransaction.notify();
         console.log(this._transactions);
+    }
+
+    deleteTransaction(transaction) {
+        
+        let test = this._transactions.filter(toDelete => {
+            console.log(toDelete);
+            return toDelete.name !== transaction;
+        });
+
+        this._transactions = test;
+        
+        this.deletedTransaction.notify();
     }
 
     updateCurrencyFactor(factor) {

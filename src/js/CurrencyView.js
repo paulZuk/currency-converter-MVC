@@ -11,6 +11,7 @@ export default class CurrencyView {
         this.list = $('ul');
 
         this.addButtonClicked = new Event(this);
+        this.deleteButtonClicked = new Event(this);
         this.currencyFactorChanged = new Event(this);
 
         this.attachModelListeners();
@@ -30,6 +31,11 @@ export default class CurrencyView {
                 factor: this.currencyFactor.val()
             })
         });
+        this.list.on('click', '.delBtn', (e)=> {
+            this.deleteButtonClicked.notify({
+                toDelete: $(e.target).parent().parent().find('.name').text()
+            });
+        });
     }
     clearInputs() {
         this.transactionName.val('');
@@ -43,6 +49,9 @@ export default class CurrencyView {
         this._model.updatedFactor.attach(() => {
             this.buildListTransactions();
         });
+        this._model.deletedTransaction.attach(()=> {
+            this.buildListTransactions();
+        })
     }
 
     buildListTransactions() {
@@ -52,10 +61,10 @@ export default class CurrencyView {
 
         transactions.forEach(elem => {
             const element = $('<li>', {class: "list-group-item d-flex justify-content-between"});
-            const del = $('<div>', {style: 'width:20px;height:20px;float:right', class:'fas fa-trash'});
-            const name = $('<div>',{ text: elem.name } );
-            const amount = $('<div>', { text: elem.value + ' EURO'});
-            const amountPln =$('<div>', { text: elem.pln + ' PLN' });
+            const del = $('<div>', {style: 'width:20px;height:20px;float:right', class:'fas fa-trash delBtn'});
+            const name = $('<div>',{style: 'width:20%',text: elem.name, class: 'name' } );
+            const amount = $('<div>', {style: 'width:20%', text: elem.value + ' EURO'});
+            const amountPln =$('<div>', {style: 'width:20%',text: parseFloat(elem.pln).toFixed(2) + ' PLN' });
            
             element
                 .append(name)
